@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compound Interest Calculator - 2025 Fintech Launch</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Left Side - Content */
+      .content-section {
+        padding: 60px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        z-index: 10;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(90deg, #00f5ff, #0080ff);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        width: fit-content;
+        animation: glow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes glow {
+        from {
+          box-shadow: 0 0 5px #00f5ff;
+        }
+        to {
+          box-shadow:
+            0 0 20px #00f5ff,
+            0 0 30px #0080ff;
+        }
+      }
+
+      .main-title {
+        font-size: 48px;
+        font-weight: 800;
+        color: white;
+        line-height: 1.1;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #ffffff, #e0e7ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        font-size: 24px;
+        color: #a0a9c0;
+        margin-bottom: 40px;
+        font-weight: 400;
+      }
+
+      .features-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 40px;
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: white;
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      .feature-icon {
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, #00f5ff, #0080ff);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .social-proof {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .stars {
+        display: flex;
+        gap: 2px;
+      }
+
+      .star {
+        color: #ffd700;
+        font-size: 16px;
+      }
+
+      .review-text {
+        color: #a0a9c0;
+        font-size: 16px;
+      }
+
+      /* Right Side - Visual */
+      .visual-section {
+        position: relative;
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .floating-elements {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .floating-coin {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: #0f0f23;
+        box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
+        animation: float 4s ease-in-out infinite;
+      }
+
+      .floating-coin:nth-child(1) {
+        top: 20%;
+        left: 20%;
+        animation-delay: 0s;
+      }
+
+      .floating-coin:nth-child(2) {
+        top: 60%;
+        right: 20%;
+        animation-delay: 1.5s;
+      }
+
+      .floating-coin:nth-child(3) {
+        bottom: 20%;
+        left: 50%;
+        animation-delay: 3s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+        }
+      }
+
+      /* App Mockup */
+      .app-mockup {
+        width: 280px;
+        height: 500px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 30px;
+        padding: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 10;
+        animation: slideIn 1s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .mockup-header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .mockup-title {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .mockup-chart {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+      }
+
+      .chart-line {
+        width: 100%;
+        height: 100px;
+        background: linear-gradient(to top, #00f5ff, #0080ff);
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .chart-line::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        animation: scan 2s linear infinite;
+      }
+
+      @keyframes scan {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .mockup-stats {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .stat-item {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .stat-value {
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .stat-label {
+        color: #a0a9c0;
+        font-size: 10px;
+      }
+
+      /* Bottom CTA */
+      .cta-section {
+        position: absolute;
+        bottom: 60px;
+        left: 80px;
+        z-index: 10;
+      }
+
+      .cta-button {
+        background: linear-gradient(135deg, #00f5ff, #0080ff);
+        color: white;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-size: 20px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 8px 32px rgba(0, 245, 255, 0.3);
+        transition: all 0.3s ease;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0, 245, 255, 0.5);
+      }
+
+      /* Background Elements */
+      .bg-grid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+          linear-gradient(rgba(0, 245, 255, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 245, 255, 0.1) 1px, transparent 1px);
+        background-size: 50px 50px;
+        opacity: 0.3;
+      }
+
+      .bg-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0, 245, 255, 0.1), transparent);
+      }
+
+      .bg-circle:nth-child(1) {
+        width: 300px;
+        height: 300px;
+        top: -150px;
+        right: -150px;
+        animation: rotate 20s linear infinite;
+      }
+
+      .bg-circle:nth-child(2) {
+        width: 200px;
+        height: 200px;
+        bottom: -100px;
+        left: -100px;
+        animation: rotate -15s linear infinite;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Screenshot Button */
+      .screenshot-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        backdrop-filter: blur(10px);
+        z-index: 100;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Background Elements -->
+      <div class="bg-grid"></div>
+      <div class="bg-circle"></div>
+      <div class="bg-circle"></div>
+
+      <!-- Left Content Section -->
+      <div class="content-section">
+        <div class="badge">🔥 NEW 2025 FINTECH TOOL</div>
+
+        <h1 class="main-title">Compound Interest<br />Calculator</h1>
+        <p class="subtitle">Turn $500/month into $48K+ in 5 years</p>
+
+        <div class="features-list">
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <span>30-second calculations</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📊</div>
+            <span>Interactive charts & graphs</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💰</div>
+            <span>Stock, crypto & savings scenarios</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🌍</div>
+            <span>English & Chinese support</span>
+          </div>
+        </div>
+
+        <div class="social-proof">
+          <div class="stars">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+          </div>
+          <span class="review-text">Trusted by 10,000+ investors</span>
+        </div>
+
+        <div class="cta-section">
+          <button class="cta-button">Get Instant Access →</button>
+        </div>
+      </div>
+
+      <!-- Right Visual Section -->
+      <div class="visual-section">
+        <div class="floating-elements">
+          <div class="floating-coin">$</div>
+          <div class="floating-coin">📈</div>
+          <div class="floating-coin">%</div>
+        </div>
+
+        <div class="app-mockup">
+          <div class="mockup-header">
+            <div class="mockup-title">Investment Growth</div>
+          </div>
+
+          <div class="mockup-chart">
+            <div class="chart-line"></div>
+          </div>
+
+          <div class="mockup-stats">
+            <div class="stat-item">
+              <div class="stat-value">$48,298</div>
+              <div class="stat-label">Final Value</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">$30,000</div>
+              <div class="stat-label">Invested</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">$18,298</div>
+              <div class="stat-label">Growth</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="screenshot-btn" onclick="takeScreenshot()">📸 Save as Image</button>
+
+    <script>
+      function takeScreenshot() {
+        // Hide screenshot button
+        document.querySelector('.screenshot-btn').style.display = 'none';
+
+        // Prompt user to use browser screenshot
+        setTimeout(() => {
+          alert(
+            '📸 Ready for screenshot!\n\nUse browser dev tools:\n1. Right click → Inspect\n2. Command+Shift+P (Mac) or Ctrl+Shift+P (Windows)\n3. Type "screenshot"\n4. Select "Capture node screenshot"'
+          );
+
+          document.querySelector('.screenshot-btn').style.display = 'block';
+        }, 1000);
+      }
+
+      // Add subtle animations
+      setInterval(() => {
+        const coins = document.querySelectorAll('.floating-coin');
+        coins.forEach((coin, index) => {
+          coin.style.transform += ' rotate(360deg)';
+        });
+      }, 8000);
+
+      console.log('🎨 2025 Fintech Cover Ready!');
+      console.log('📏 Dimensions: 1200×630px');
+      console.log('🎯 Template: Fintech App Launch Style');
+    </script>
+  </body>
+</html>

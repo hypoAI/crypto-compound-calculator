@@ -21,8 +21,8 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ className = '' }) =>
     return `
       💰 ${t('common.title')}\
 
-      🎯 ${t('scenarios.' + params.investmentType)}: ${formatCurrency(result.finalValue)}
-      💵 ${t('results.totalInvestment')}: ${formatCurrency(result.totalInvestment)}
+      🎯 ${t('scenarios.' + params.investmentType)}: ${formatCurrency(result.finalValue, 'USD', 'en-US', true)}
+      💵 ${t('results.totalInvestment')}: ${formatCurrency(result.totalInvestment, 'USD', 'en-US', true)}
       📈 ROI: ${roi}%
 
       ${t('share.description')} 
@@ -111,12 +111,12 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ className = '' }) =>
       ctx.font = '28px system-ui, -apple-system, sans-serif';
       ctx.fillStyle = '#475569';
       ctx.fillText(
-        `${isChinese ? '初始投资' : 'Initial Investment'}: ${formatCurrency(params.initialInvestment)}`,
+        `${isChinese ? '初始投资' : 'Initial Investment'}: ${formatCurrency(params.initialInvestment, 'USD', 'en-US', true)}`,
         120,
         paramY
       );
       ctx.fillText(
-        `${isChinese ? '每月定投' : 'Monthly Investment'}: ${formatCurrency(params.monthlyInvestment)}`,
+        `${isChinese ? '每月定投' : 'Monthly Investment'}: ${formatCurrency(params.monthlyInvestment, 'USD', 'en-US', true)}`,
         120,
         paramY + 50
       );
@@ -141,21 +141,21 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ className = '' }) =>
       ctx.font = '28px system-ui, -apple-system, sans-serif';
       ctx.fillStyle = '#059669';
       ctx.fillText(
-        `${isChinese ? '最终价值' : 'Final Value'}: ${formatCurrency(result.finalValue)}`,
+        `${isChinese ? '最终价值' : 'Final Value'}: ${formatCurrency(result.finalValue, 'USD', 'en-US', true)}`,
         120,
         resultY
       );
 
       ctx.fillStyle = '#475569';
       ctx.fillText(
-        `${isChinese ? '总投资' : 'Total Investment'}: ${formatCurrency(result.totalInvestment)}`,
+        `${isChinese ? '总投资' : 'Total Investment'}: ${formatCurrency(result.totalInvestment, 'USD', 'en-US', true)}`,
         120,
         resultY + 50
       );
 
       ctx.fillStyle = '#dc2626';
       ctx.fillText(
-        `${isChinese ? '总收益' : 'Total Interest'}: ${formatCurrency(result.totalInterest)}`,
+        `${isChinese ? '总收益' : 'Total Interest'}: ${formatCurrency(result.totalInterest, 'USD', 'en-US', true)}`,
         120,
         resultY + 100
       );
@@ -242,18 +242,19 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ className = '' }) =>
   };
 
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`space-y-3 ${className}`}>
       <div className="text-center">
-        <h3 className="text-lg font-semibold text-foreground mb-4">{t('share.title')}</h3>
+        <h3 className="text-base font-semibold text-foreground mb-3">{t('share.title')}</h3>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {/* 移动端：四个按钮排成两行 */}
+      <div className="grid grid-cols-2 gap-2 lg:hidden">
         {isChineseUser() && (
           <button
             onClick={() => handleShare('wechat')}
-            className="flex items-center justify-center px-4 py-3 bg-[#07C160] text-white rounded-md hover:bg-[#06ad56] transition-colors text-base"
+            className="flex items-center justify-center px-3 py-2 bg-[#07C160] text-white rounded-md hover:bg-[#06ad56] transition-colors text-sm"
           >
-            <svg className="w-7 h-7 mr-2" viewBox="0 0 24 24" fill="currentColor">
+            <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.486 2 2 6.03 2 11.005c0 2.624 1.204 4.99 3.19 6.696L4 22l4.694-2.262C10.04 19.97 11.008 20 12 20c5.514 0 10-4.02 10-8.995C22 6.03 17.514 2 12 2zm4.039 10.766c.248.54.389 1.138.389 1.767 0 2.485-2.017 4.5-4.5 4.5-.632 0-1.236-.13-1.779-.366l-1.106.531-1.099-.42-1.101.42-1.106-.531c-.543.236-1.147.366-1.779.366-2.483 0-4.5-2.015-4.5-4.5 0-2.485 2.017-4.5 4.5-4.5.632 0 1.236.13 1.779.366l1.106-.531 1.099.42 1.101-.42 1.106.531c.543-.236 1.147-.366 1.779-.366 2.483 0 4.5 2.015 4.5 4.5 0 .629-.141 1.227-.389 1.767z" />
             </svg>
             {t('share.wechat')}
@@ -262,9 +263,9 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ className = '' }) =>
 
         <button
           onClick={() => handleShare('twitter')}
-          className="flex items-center justify-center px-4 py-3 bg-[#1DA1F2] text-white rounded-md hover:bg-[#1a8cd8] transition-colors text-base"
+          className="flex items-center justify-center px-3 py-2 bg-[#1DA1F2] text-white rounded-md hover:bg-[#1a8cd8] transition-colors text-sm"
         >
-          <svg className="w-7 h-7 mr-2" viewBox="0 0 24 24" fill="currentColor">
+          <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor">
             <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z" />
           </svg>
           {t('share.twitter')}
@@ -272,9 +273,9 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ className = '' }) =>
 
         <button
           onClick={() => handleShare('facebook')}
-          className="flex items-center justify-center px-4 py-3 bg-[#1877F2] text-white rounded-md hover:bg-[#166fe5] transition-colors text-base"
+          className="flex items-center justify-center px-3 py-2 bg-[#1877F2] text-white rounded-md hover:bg-[#166fe5] transition-colors text-sm"
         >
-          <svg className="w-14 h-14 mr-2" viewBox="0 0 24 24" fill="currentColor">
+          <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor">
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
           </svg>
           {t('share.facebook')}
@@ -282,10 +283,10 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ className = '' }) =>
 
         <button
           onClick={() => handleShare('copy')}
-          className="flex items-center justify-center px-4 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-base"
+          className="flex items-center justify-center px-3 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm"
         >
           <svg
-            className="w-6 h-6 mr-2"
+            className="w-4 h-4 mr-1"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -300,10 +301,85 @@ export const ShareButtons: React.FC<ShareButtonsProps> = ({ className = '' }) =>
         <button
           onClick={() => handleShare('save')}
           disabled={generatingPoster}
-          className="flex items-center justify-center px-4 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-base"
+          className="flex items-center justify-center px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
         >
           <svg
-            className="w-8 h-8 mr-2"
+            className="w-4 h-4 mr-1"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          {generatingPoster
+            ? currentLang === 'zh'
+              ? '生成中...'
+              : 'Generating...'
+            : t('share.saveImage')}
+        </button>
+      </div>
+
+      {/* PC端：四个按钮同一行并居中 */}
+      <div className="hidden lg:flex lg:justify-center lg:items-center lg:gap-3">
+        {isChineseUser() && (
+          <button
+            onClick={() => handleShare('wechat')}
+            className="flex items-center justify-center px-4 py-3 bg-[#07C160] text-white rounded-lg hover:bg-[#06ad56] transition-colors text-sm font-medium"
+          >
+            <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.486 2 2 6.03 2 11.005c0 2.624 1.204 4.99 3.19 6.696L4 22l4.694-2.262C10.04 19.97 11.008 20 12 20c5.514 0 10-4.02 10-8.995C22 6.03 17.514 2 12 2zm4.039 10.766c.248.54.389 1.138.389 1.767 0 2.485-2.017 4.5-4.5 4.5-.632 0-1.236-.13-1.779-.366l-1.106.531-1.099-.42-1.101.42-1.106-.531c-.543.236-1.147.366-1.779.366-2.483 0-4.5-2.015-4.5-4.5 0-2.485 2.017-4.5 4.5-4.5.632 0 1.236.13 1.779.366l1.106-.531 1.099.42 1.101-.42 1.106.531c.543-.236 1.147-.366 1.779-.366 2.483 0 4.5 2.015 4.5 4.5 0 .629-.141 1.227-.389 1.767z" />
+            </svg>
+            {t('share.wechat')}
+          </button>
+        )}
+
+        <button
+          onClick={() => handleShare('twitter')}
+          className="flex items-center justify-center px-4 py-3 bg-[#1DA1F2] text-white rounded-lg hover:bg-[#1a8cd8] transition-colors text-sm font-medium"
+        >
+          <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z" />
+          </svg>
+          {t('share.twitter')}
+        </button>
+
+        <button
+          onClick={() => handleShare('facebook')}
+          className="flex items-center justify-center px-4 py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#166fe5] transition-colors text-sm font-medium"
+        >
+          <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+          {t('share.facebook')}
+        </button>
+
+        <button
+          onClick={() => handleShare('copy')}
+          className="flex items-center justify-center px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+        >
+          <svg
+            className="w-5 h-5 mr-2"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" />
+          </svg>
+          {copied ? (currentLang === 'zh' ? '已复制!' : 'Copied!') : t('share.copyLink')}
+        </button>
+
+        <button
+          onClick={() => handleShare('save')}
+          disabled={generatingPoster}
+          className="flex items-center justify-center px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+        >
+          <svg
+            className="w-5 h-5 mr-2"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"

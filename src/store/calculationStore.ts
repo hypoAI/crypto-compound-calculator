@@ -45,15 +45,37 @@ export const useCalculationStore = create<CalculationState>()(
 
       setParams: newParams => {
         const currentParams = get().params;
-        const updatedParams = { ...currentParams, ...newParams };
 
-        set({ params: updatedParams });
+        // 数值边界处理
+        const processedParams = {
+          ...currentParams,
+          ...newParams,
+          initialInvestment: Math.max(
+            0,
+            Number(newParams.initialInvestment ?? currentParams.initialInvestment) || 0
+          ),
+          monthlyInvestment: Math.max(
+            0,
+            Number(newParams.monthlyInvestment ?? currentParams.monthlyInvestment) || 0
+          ),
+          years: Math.max(1, Math.min(50, Number(newParams.years ?? currentParams.years) || 1)),
+          annualReturnRate: Math.max(
+            -100,
+            Math.min(100, Number(newParams.annualReturnRate ?? currentParams.annualReturnRate) || 0)
+          ),
+        };
+
+        set({ params: processedParams });
 
         // 验证并重新计算
-        const validation = validateCalculationParams(updatedParams);
+        const validation = validateCalculationParams(processedParams);
         if (validation.valid) {
-          const newResult = calculateCompoundInvestment(updatedParams);
-          set({ result: newResult, errors: [] });
+          try {
+            const newResult = calculateCompoundInvestment(processedParams);
+            set({ result: newResult, errors: [] });
+          } catch (error) {
+            set({ errors: [error instanceof Error ? error.message : 'Calculation error'] });
+          }
         } else {
           set({ errors: validation.errors });
         }
@@ -74,7 +96,7 @@ export const useCalculationStore = create<CalculationState>()(
         } catch (error) {
           console.error('Calculation failed:', error);
           set({
-            errors: ['Calculation error occurred'],
+            errors: [error instanceof Error ? error.message : 'Calculation error occurred'],
             isCalculating: false,
           });
         }

@@ -29,6 +29,19 @@ export function calculateCompoundInvestment(params: CalculationParams): Calculat
   const { initialInvestment, monthlyInvestment, years, annualReturnRate, compoundFrequency } =
     params;
 
+  // 边界条件验证
+  if (years <= 0 || years > 50) {
+    throw new Error('Investment period must be between 1 and 50 years');
+  }
+
+  if (initialInvestment < 0 || monthlyInvestment < 0) {
+    throw new Error('Investment amounts cannot be negative');
+  }
+
+  if (annualReturnRate < -100 || annualReturnRate > 100) {
+    throw new Error('Annual return rate must be between -100% and 100%');
+  }
+
   const rate = annualReturnRate / 100;
   const compoundFactor = getCompoundFactor(compoundFrequency);
   const periodsPerYear = compoundFactor;
@@ -42,12 +55,20 @@ export function calculateCompoundInvestment(params: CalculationParams): Calculat
   // 计算初始投资的未来价值
   const initialFutureValue = initialInvestment * Math.pow(1 + ratePerPeriod, totalPeriods);
 
-  // 计算每月定投的未来价值
-  const monthlyRate = rate / 12; // 月利率
-  const monthlyFV =
-    monthlyInvestment *
-    ((Math.pow(1 + monthlyRate, years * 12) - 1) / monthlyRate) *
-    (1 + monthlyRate); // 期初投资
+  // 计算每月定投的未来价值（处理0利率情况）
+  let monthlyFV = 0;
+  if (monthlyInvestment > 0) {
+    if (rate === 0) {
+      // 0利率时，简单累加
+      monthlyFV = monthlyInvestment * 12 * years;
+    } else {
+      const monthlyRate = rate / 12; // 月利率
+      monthlyFV =
+        monthlyInvestment *
+        ((Math.pow(1 + monthlyRate, years * 12) - 1) / monthlyRate) *
+        (1 + monthlyRate); // 期初投资
+    }
+  }
 
   futureValue = initialFutureValue + monthlyFV;
 
@@ -63,10 +84,15 @@ export function calculateCompoundInvestment(params: CalculationParams): Calculat
     const initialValueAtYear = initialInvestment * Math.pow(1 + ratePerPeriod, periodsSoFar);
 
     const monthlyInvestmentsSoFar = monthlyInvestment * 12 * year;
-    const monthlyValueAtYear =
-      monthlyInvestment *
-      ((Math.pow(1 + monthlyRate, year * 12) - 1) / monthlyRate) *
-      (1 + monthlyRate);
+    let monthlyValueAtYear = monthlyInvestmentsSoFar; // 0利率时的默认值
+
+    if (monthlyInvestment > 0 && rate !== 0) {
+      const monthlyRate = rate / 12;
+      monthlyValueAtYear =
+        monthlyInvestment *
+        ((Math.pow(1 + monthlyRate, year * 12) - 1) / monthlyRate) *
+        (1 + monthlyRate);
+    }
 
     const yearTotalValue = initialValueAtYear + monthlyValueAtYear;
     const yearInterest = yearTotalValue - (initialInvestment + monthlyInvestmentsSoFar);
@@ -88,17 +114,42 @@ export function calculateCompoundInvestment(params: CalculationParams): Calculat
 }
 
 /**
+ * 格式化大数字为简洁格式
+ * @param amount 金额
+ * @returns 简洁格式字符串（如 $1.5M, $2.3B）
+ */
+function formatLargeNumber(amount: number): string {
+  const abs = Math.abs(amount);
+
+  if (abs >= 1000000000) {
+    return `$${(amount / 1000000000).toFixed(1)}B`;
+  } else if (abs >= 1000000) {
+    return `$${(amount / 1000000).toFixed(1)}M`;
+  } else if (abs >= 1000) {
+    return `$${(amount / 1000).toFixed(1)}K`;
+  } else {
+    return `$${Math.round(amount).toLocaleString()}`;
+  }
+}
+
+/**
  * 格式化货币数字
  * @param amount 金额
  * @param currency 货币代码
  * @param locale 地区
+ * @param useShortFormat 是否使用简洁格式
  * @returns 格式化后的货币字符串
  */
 export function formatCurrency(
   amount: number,
   currency: string = 'USD',
-  locale: string = 'en-US'
+  locale: string = 'en-US',
+  useShortFormat: boolean = false
 ): string {
+  if (useShortFormat && Math.abs(amount) >= 100000) {
+    return formatLargeNumber(amount);
+  }
+
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,

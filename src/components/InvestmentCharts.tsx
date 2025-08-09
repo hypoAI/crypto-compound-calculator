@@ -99,7 +99,7 @@ export const InvestmentCharts: React.FC<InvestmentChartsProps> = ({ className = 
         intersect: false,
         callbacks: {
           label: function (context) {
-            return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
+            return `${context.dataset.label}: ${formatCurrency(context.parsed.y, 'USD', 'en-US', true)}`;
           },
         },
       },
@@ -121,7 +121,7 @@ export const InvestmentCharts: React.FC<InvestmentChartsProps> = ({ className = 
         },
         ticks: {
           callback: function (value) {
-            return formatCurrency(value as number);
+            return formatCurrency(value as number, 'USD', 'en-US', true);
           },
         },
         grid: {
@@ -158,7 +158,7 @@ export const InvestmentCharts: React.FC<InvestmentChartsProps> = ({ className = 
             const dataset = data.datasets[0];
             return (
               data.labels?.map((label, index) => ({
-                text: `${label}: ${formatCurrency(dataset.data[index] as number)}`,
+                text: `${label}: ${formatCurrency(dataset.data[index] as number, 'USD', 'en-US', true)}`,
                 fillStyle: Array.isArray(dataset.backgroundColor)
                   ? dataset.backgroundColor[index]
                   : dataset.backgroundColor || '',
@@ -189,7 +189,7 @@ export const InvestmentCharts: React.FC<InvestmentChartsProps> = ({ className = 
           label: function (context) {
             const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
             const percentage = (((context.parsed as number) / total) * 100).toFixed(1);
-            return `${context.label}: ${formatCurrency(context.parsed as number)} (${percentage}%)`;
+            return `${context.label}: ${formatCurrency(context.parsed as number, 'USD', 'en-US', true)} (${percentage}%)`;
           },
         },
       },
@@ -229,8 +229,8 @@ export const InvestmentCharts: React.FC<InvestmentChartsProps> = ({ className = 
       </div>
 
       {/* 图表容器 */}
-      <div className="bg-card border rounded-lg p-4">
-        <div className="relative h-80 md:h-96">
+      <div className="bg-card border rounded-lg p-3">
+        <div className="relative h-48 sm:h-64 md:h-80 lg:h-96">
           {selectedChart === 'growth' ? (
             <Line data={growthChartData} options={growthChartOptions} />
           ) : (
